@@ -1,32 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import axios from "axios";
 
 import "./App.css";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 
+import { AuthContext } from "./context/AuthContext";
+
 function App() {
-  const [isLoggedIn, setLoggedIn] = useState(false);
-  const [token, setToken] = useState("");
-  const [user, setUser] = useState("");
+  //AuthContextProvider tag is wrapping the App tag in the index.js file
+  const { isLoggedIn, token, user, loginFunc, logoutFunc } = useContext(
+    AuthContext
+  );
 
-  const loginFunc = (tokenArg, userArg) => {
-    setLoggedIn(true);
-    setToken(tokenArg);
-    setUser(userArg);
-    localStorage.setItem(
-      "userData",
-      JSON.stringify({ user: userArg, token: tokenArg })
-    );
-  };
-
-  const logoutFunc = () => {
-    setLoggedIn(false);
-    setToken("");
-    setUser("");
-    localStorage.removeItem("userData");
-  };
-
+  //Example of makng a request to a route protected on the backend
   const protectedRouteRequest = () => {
     axios
       .get("/protected", {
